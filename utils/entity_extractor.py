@@ -1,51 +1,71 @@
-import pandas as pd
+import csv
+import io
+import zipfile
 import re
 import os
-import gc # Garbage Collector to free RAM
 
+# -----------------------------
+# DYNAMIC PATH HANDLING
+# -----------------------------
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 ZIP_PATH = os.path.join(BASE_DIR, "data", "symptoms.csv.zip")
 
-# Global variables to hold only the processed data
+# Global variables for the processed data
 DISEASE_MAP = {}
 SYMPTOM_LOOKUP = {}
 
-def load_data_efficiently():
+def load_data_without_pandas():
     global SYMPTOM_LOOKUP, DISEASE_MAP
+    
+    if not os.path.exists(ZIP_PATH):
+        print(f"❌ File not found: {ZIP_PATH}")
+        return
+
     try:
-        # 1. Load the data. We assume symptoms are 0/1 (integers).
-        # Loading symptoms as 'int8' uses 1/4 the memory of default integers.
-        df = pd.read_csv(ZIP_PATH, compression='zip')
-        
-        # Normalize columns
-        df.columns = [col.lower().strip() for col in df.columns]
-        disease_col = "diseases"
-
-        # 2. Build a mapping of symptom -> list of diseases
-        # This is MUCH lighter than keeping a 190MB DataFrame in RAM
-        symptom_cols = [c for c in df.columns if c != disease_col]
-        
-        for symptom in symptom_cols:
-            # Get names of diseases where this symptom == 1
-            matching_diseases = df[df[symptom] == 1][disease_col].unique().tolist()
-            if matching_diseases:
-                DISEASE_MAP[symptom] = matching_diseases
+        with zipfile.ZipFile(ZIP_PATH, 'r') as z:
+            # Get the name of the CSV inside the zip
+            csv_filename = z.namelist()[0] 
             
-            # Clean name for lookup
-            cleaned_name = re.sub(r"[^a-zA-Z0-9\s]", "", symptom).strip()
-            SYMPTOM_LOOKUP[cleaned_name] = symptom
+            with z.open(csv_filename) as f:
+                # Wrap the binary stream in a text wrapper for the CSV reader
+                wrapper = io.TextIOWrapper(f, encoding='utf-8')
+                reader = csv.DictReader(wrapper)
+                
+                # Get symptoms from the header (everything except 'diseases')
+                # Lowercase and clean them immediately
+                raw_headers = reader.fieldnames
+                disease_col = "diseases" # Change this if your column name is different
+                
+                symptom_cols = [h for h in raw_headers if h.lower().strip() != disease_col]
+                
+                # Pre-build lookup for extraction
+                for s in symptom_cols:
+                    clean_name = re.sub(r"[^a-zA-Z0-9\s]", "", s.lower()).strip()
+                    SYMPTOM_LOOKUP[clean_name] = s
+                    DISEASE_MAP[s] = set() # Use a set to avoid duplicates
 
-        print(f"✅ Loaded {len(DISEASE_MAP)} symptoms into memory.")
+                # Process row by row (This keeps RAM usage very low)
+                for row in reader:
+                    current_disease = row.get(disease_col)
+                    if not current_disease:
+                        continue
+                        
+                    for s in symptom_cols:
+                        # Only link if the value is '1' (present)
+                        if row.get(s) == '1':
+                            DISEASE_MAP[s].add(current_disease)
 
-        # 3. CRITICAL: Delete the big DataFrame and clear RAM
-        del df
-        gc.collect() 
+        # Convert sets back to lists for easier use later
+        for s in DISEASE_MAP:
+            DISEASE_MAP[s] = list(DISEASE_MAP[s])
+
+        print(f"✅ Successfully loaded {len(DISEASE_MAP)} symptoms via Streaming.")
 
     except Exception as e:
-        print(f"❌ Memory Load Error: {e}")
+        print(f"❌ Ultra-Lightweight Load Error: {e}")
 
-# Run the loader immediately
-load_data_efficiently()
+# Initial load
+load_data_without_pandas()
 
 def clean_text(text):
     return re.sub(r"[^a-zA-Z0-9\s]", "", text.lower())
@@ -62,4 +82,5 @@ def get_possible_conditions(symptoms):
     results = []
     for s in symptoms:
         results.extend(DISEASE_MAP.get(s, []))
+    # Remove duplicates
     return list(dict.fromkeys(results))
