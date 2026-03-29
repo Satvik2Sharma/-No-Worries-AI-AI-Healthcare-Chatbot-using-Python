@@ -3,70 +3,89 @@ import io
 import zipfile
 import re
 import os
+import pandas as pd
+import gc
 
-# -----------------------------
-# DYNAMIC PATH HANDLING
-# -----------------------------
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 ZIP_PATH = os.path.join(BASE_DIR, "data", "symptoms.csv.zip")
+PRECAUTIONS_PATH = os.path.join(BASE_DIR, "data", "precautions.csv")
+NUTRITION_PATH = os.path.join(BASE_DIR, "data", "nutrition.xlsx")
 
-# Global variables for the processed data
+# Global data stores
 DISEASE_MAP = {}
 SYMPTOM_LOOKUP = {}
+PRECAUTION_MAP = {}
+NUTRITION_MAP = {}
 
-def load_data_without_pandas():
-    global SYMPTOM_LOOKUP, DISEASE_MAP
+def load_all_data():
+    global SYMPTOM_LOOKUP, DISEASE_MAP, PRECAUTION_MAP, NUTRITION_MAP
     
-    if not os.path.exists(ZIP_PATH):
-        print(f"❌ File not found: {ZIP_PATH}")
-        return
-
-    try:
-        with zipfile.ZipFile(ZIP_PATH, 'r') as z:
-            # Get the name of the CSV inside the zip
-            csv_filename = z.namelist()[0] 
-            
-            with z.open(csv_filename) as f:
-                # Wrap the binary stream in a text wrapper for the CSV reader
-                wrapper = io.TextIOWrapper(f, encoding='utf-8')
-                reader = csv.DictReader(wrapper)
-                
-                # Get symptoms from the header (everything except 'diseases')
-                # Lowercase and clean them immediately
-                raw_headers = reader.fieldnames
-                disease_col = "diseases" # Change this if your column name is different
-                
-                symptom_cols = [h for h in raw_headers if h.lower().strip() != disease_col]
-                
-                # Pre-build lookup for extraction
-                for s in symptom_cols:
-                    clean_name = re.sub(r"[^a-zA-Z0-9\s]", "", s.lower()).strip()
-                    SYMPTOM_LOOKUP[clean_name] = s
-                    DISEASE_MAP[s] = set() # Use a set to avoid duplicates
-
-                # Process row by row (This keeps RAM usage very low)
-                for row in reader:
-                    current_disease = row.get(disease_col)
-                    if not current_disease:
-                        continue
-                        
+    # 1. Load Symptoms (Streaming ZIP to save RAM)
+    if os.path.exists(ZIP_PATH):
+        try:
+            with zipfile.ZipFile(ZIP_PATH, 'r') as z:
+                csv_filename = z.namelist()[0] 
+                with z.open(csv_filename) as f:
+                    wrapper = io.TextIOWrapper(f, encoding='utf-8')
+                    reader = csv.DictReader(wrapper)
+                    disease_col = next((h for h in reader.fieldnames if h.lower().strip() == "diseases"), "diseases")
+                    symptom_cols = [h for h in reader.fieldnames if h != disease_col]
+                    
                     for s in symptom_cols:
-                        # Only link if the value is '1' (present)
-                        if row.get(s) == '1':
-                            DISEASE_MAP[s].add(current_disease)
+                        clean_name = re.sub(r"[^a-zA-Z0-9\s]", "", s.lower()).strip()
+                        SYMPTOM_LOOKUP[clean_name] = s
+                        DISEASE_MAP[s] = set()
 
-        # Convert sets back to lists for easier use later
-        for s in DISEASE_MAP:
-            DISEASE_MAP[s] = list(DISEASE_MAP[s])
+                    for row in reader:
+                        disease = row.get(disease_col)
+                        if disease:
+                            for s in symptom_cols:
+                                if str(row.get(s, "0")).strip().split('.')[0] == '1':
+                                    DISEASE_MAP[s].add(disease.strip())
+            for s in DISEASE_MAP: DISEASE_MAP[s] = list(DISEASE_MAP[s])
+            print("✅ Symptoms loaded.")
+        except Exception as e: print(f"❌ Symptom Error: {e}")
 
-        print(f"✅ Successfully loaded {len(DISEASE_MAP)} symptoms via Streaming.")
+    # 2. Load Precautions (CSV)
+    if os.path.exists(PRECAUTIONS_PATH):
+        try:
+            with open(PRECAUTIONS_PATH, mode='r', encoding='utf-8') as f:
+                reader = csv.reader(f)
+                next(reader) # Skip header
+                for row in reader:
+                    if len(row) > 1:
+                        disease = row[0].strip().lower()
+                        precautions = [p.strip() for p in row[1:] if p.strip()]
+                        PRECAUTION_MAP[disease] = precautions
+            print("✅ Precautions loaded.")
+        except Exception as e: print(f"❌ Precaution Error: {e}")
 
-    except Exception as e:
-        print(f"❌ Ultra-Lightweight Load Error: {e}")
+    # 3. Load Nutrition (Excel - Memory sensitive)
+    if os.path.exists(NUTRITION_PATH):
+        try:
+            # We load, extract to dict, then DELETE the dataframe immediately
+            df_nut = pd.read_excel(NUTRITION_PATH)
+            # Assuming columns: 'Disease' and 'Diet'
+            for _, row in df_nut.iterrows():
+                disease = str(row[0]).strip().lower()
+                diet = str(row[1]).strip()
+                NUTRITION_MAP[disease] = diet
+            del df_nut
+            gc.collect()
+            print("✅ Nutrition loaded.")
+        except Exception as e: print(f"❌ Nutrition Error: {e}")
 
-# Initial load
-load_data_without_pandas()
+load_all_data()
 
+# Helper to get extra info
+def get_details(disease_name):
+    name = disease_name.lower().strip()
+    return {
+        "precautions": PRECAUTION_MAP.get(name, ["Consult a professional"]),
+        "nutrition": NUTRITION_MAP.get(name, "Maintain a balanced diet")
+    }
+
+# Keep your existing extract_symptoms and get_possible_conditions functions below...
 def clean_text(text):
     return re.sub(r"[^a-zA-Z0-9\s]", "", text.lower())
 
@@ -82,5 +101,4 @@ def get_possible_conditions(symptoms):
     results = []
     for s in symptoms:
         results.extend(DISEASE_MAP.get(s, []))
-    # Remove duplicates
     return list(dict.fromkeys(results))
