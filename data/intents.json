@@ -1,0 +1,281 @@
+{
+  "intents": [
+    {
+      "tag": "ask_bot_capability",
+      "patterns": [
+        "what can you do", "how can you help me", "what is your purpose", "what do you do",
+        "what are your features", "can you diagnose me", "are you a real doctor", 
+        "tell me about yourself", "what kind of questions can i ask", "how do i use you",
+        "what are your capabilities", "help me understand what you do", "what is your job",
+        "who are you", "can you give me medical advice", "what is this chatbot for",
+        "how does this work", "what can i ask you", "list your functions", "what are you trained to do"
+      ],
+      "responses": [
+        "I can provide general health guidance, symptom information, and lifestyle advice. I am not a substitute for a doctor.",
+        "I am an AI healthcare assistant. I can help answer general questions about symptoms, wellness, and healthy habits. Please consult a human doctor for medical diagnoses.",
+        "My purpose is to offer preliminary information regarding common health issues and wellness tips. I cannot prescribe medication or offer official diagnoses."
+      ]
+    },
+    {
+      "tag": "greeting",
+      "patterns": [
+        "hello", "hi", "hey", "good morning", "good afternoon", "good evening", "howdy",
+        "hi there", "hello there", "hey there", "greetings", "hiya", "what's up", "sup",
+        "how are you", "how are you doing", "is anyone there", "hello chatbot", "hi bot", "hey bot"
+      ],
+      "responses": [
+        "Hello! How can I help you with your health today?",
+        "Hi there! What symptoms or health questions can I assist you with?",
+        "Greetings! I am here to provide general health information. How can I help?"
+      ]
+    },
+    {
+      "tag": "goodbye",
+      "patterns": [
+        "bye", "goodbye", "see you", "see you later", "catch you later", "talk to you later",
+        "bye bye", "im leaving", "gotta go", "i have to go", "exit", "quit", "stop",
+        "end conversation", "goodnight", "have a good one", "take care", "farewell", "cya", "adios"
+      ],
+      "responses": [
+        "Take care! Remember to consult a doctor if you have serious concerns.",
+        "Goodbye! Stay healthy and safe.",
+        "Farewell! Feel free to return if you have more questions."
+      ]
+    },
+    {
+      "tag": "thanks",
+      "patterns": [
+        "thanks", "thank you", "thanks a lot", "thank you so much", "thanks for the help",
+        "appreciate it", "i appreciate it", "thanks for your time", "helpful", "that helped",
+        "great, thanks", "awesome, thanks", "thank you bot", "cheers", "many thanks",
+        "thanks a bunch", "thank you very much", "good job", "perfect thanks", "you're the best"
+      ],
+      "responses": [
+        "You're very welcome! Let me know if you need anything else.",
+        "Happy to help! Take care of yourself.",
+        "Anytime! Wishing you good health."
+      ]
+    },
+    {
+      "tag": "fallback",
+      "patterns": [
+        "asdfgh", "idk", "what", "huh", "i don't understand", "can you help me with my taxes",
+        "what is the weather", "tell me a joke", "who is the president", "book a flight",
+        "blah blah", "testing 123", "i don't know what to say", "random stuff", "how do i bake a cake",
+        "what time is it", "play music", "open youtube", "what is your favorite color", "do you like movies"
+      ],
+      "responses": [
+        "I'm sorry, I didn't quite understand that. I am an AI trained to answer general health and wellness questions.",
+        "I may not have the answer to that. Could you rephrase your health-related question?",
+        "My expertise is limited to general health advice and symptom information. How can I help with that?"
+      ]
+    },
+    {
+      "tag": "general_health_advice",
+      "patterns": [
+        "how to stay healthy", "give me health tips", "how to improve my health", 
+        "what are some good health habits", "how to be healthier", "general wellness advice",
+        "health advice please", "how can i take care of my body", "tips for a healthy life",
+        "how to stay fit and healthy", "what should i do to stay healthy", "healthy lifestyle tips",
+        "how to boost immunity", "daily health routine", "preventative health tips", 
+        "how to live longer", "best practices for health", "i want to be healthier", 
+        "guide to healthy living", "health and wellness tips"
+      ],
+      "responses": [
+        "A healthy lifestyle includes a balanced diet, regular exercise, adequate sleep, and managing stress.",
+        "To stay healthy, make sure to stay hydrated, eat plenty of fruits and vegetables, and aim for 7-9 hours of sleep.",
+        "Routine check-ups, regular physical activity, and avoiding smoking or excessive alcohol are great ways to maintain good health."
+      ]
+    },
+    {
+      "tag": "headache",
+      "patterns": [
+        "i have a headache", "my head hurts", "headache", "migraine", "my head is throbbing",
+        "pain in my forehead", "splitting headache", "head feels heavy", "pressure in my head",
+        "why does my head hurt", "i've got a bad headache", "my head is aching", "severe head pain",
+        "head hurts so much", "i feel a headache coming on", "constant headache", 
+        "headache behind eyes", "pounding in my head", "what to do for headache", "how to cure a headache"
+      ],
+      "responses": [
+        "Headaches are frequently triggered by stress, dehydration, or prolonged screen time. Try resting in a quiet, dimly lit room and drinking plenty of water.",
+        "Mild to moderate headaches can often be managed by staying hydrated and getting adequate rest. If the pain is unusually severe, sudden, or persistent, please consult a doctor."
+      ]
+    },
+    {
+      "tag": "fatigue",
+      "patterns": [
+        "i feel so tired", "i am exhausted", "fatigue", "i have no energy", "feeling lethargic",
+        "always tired", "why am i so tired", "chronic fatigue", "i feel completely drained",
+        "worn out", "zero energy today", "extreme tiredness", "i feel wiped out", 
+        "i just want to sleep", "lack of energy", "feeling sluggish", "exhaustion", 
+        "i'm exhausted", "so tired all the time", "can't keep my eyes open"
+      ],
+      "responses": [
+        "Fatigue may be caused by factors like poor sleep, stress, or nutrition. Try getting adequate rest, staying hydrated, and maintaining a balanced diet.",
+        "Persistent tiredness often results from lifestyle factors such as overwork or dehydration. Ensure you are getting 7-9 hours of sleep and eating nutritious meals.",
+        "Exhaustion can stem from physical or mental strain. Rest, drink plenty of water, and if the fatigue persists for several weeks, consider consulting a healthcare professional."
+      ]
+    },
+    {
+      "tag": "dizziness",
+      "patterns": [
+        "i feel dizzy", "dizziness", "the room is spinning", "i feel lightheaded", "vertigo",
+        "i'm getting dizzy", "feeling faint", "i feel woozy", "dizzy spells", "loss of balance",
+        "i feel unsteady", "my head is spinning", "why do i feel dizzy", "dizzy when standing up",
+        "sudden dizziness", "i feel like i might faint", "everything is spinning", "lightheadedness",
+        "i am experiencing vertigo", "feeling off balance"
+      ],
+      "responses": [
+        "Dizziness can be caused by dehydration, low blood sugar, or standing up too quickly. Please sit or lie down immediately so you do not fall.",
+        "Try drinking a glass of water and resting. If the dizziness is severe, accompanied by other symptoms, or does not pass, please consult a healthcare provider."
+      ]
+    },
+    {
+      "tag": "insomnia",
+      "patterns": [
+        "i can't sleep", "insomnia", "trouble sleeping", "i keep waking up at night", 
+        "can't fall asleep", "sleeplessness", "i have insomnia", "struggling to sleep", 
+        "i haven't slept", "wide awake at night", "poor sleep quality", "i can't get to sleep",
+        "tossing and turning", "why can't i sleep", "how to cure insomnia", "i wake up too early",
+        "sleep problems", "i suffer from insomnia", "can't get a good night's sleep", "i need help sleeping"
+      ],
+      "responses": [
+        "Trouble sleeping can stem from stress, caffeine, or poor sleep habits. Try minimizing screen time an hour before bed and keeping your room cool.",
+        "Establishing a consistent bedtime routine can help. Avoid heavy meals and caffeine late in the day, and try reading or meditating before sleep."
+      ]
+    },
+    {
+      "tag": "shortness_of_breath",
+      "patterns": [
+        "shortness of breath", "i can't breathe", "trouble breathing", "gasping for air", 
+        "hard to breathe", "i feel out of breath", "breathing difficulties", "can't catch my breath",
+        "chest feels tight can't breathe", "struggling for air", "heavy breathing", 
+        "wheezing and shortness of breath", "i feel breathless", "panting for breath", 
+        "loss of breath", "air hunger", "breathing heavily", "i can't take a deep breath", 
+        "short of breath", "difficult to breathe"
+      ],
+      "responses": [
+        "Shortness of breath can be a sign of a severe condition. This could be serious. Please seek medical attention immediately or call emergency services.",
+        "Difficulty breathing is a critical symptom. Please do not wait; consult a doctor or go to the nearest emergency room right away."
+      ]
+    },
+    {
+      "tag": "chest_pain",
+      "patterns": [
+        "chest pain", "my chest hurts", "pain in my chest", "tightness in chest", 
+        "sharp pain in chest", "chest pressure", "heart hurts", "pain near my heart", 
+        "heavy feeling in chest", "crushing chest pain", "stabbing pain in chest", 
+        "chest tightness", "burning in chest", "my chest is aching", "angina", 
+        "discomfort in chest", "pain radiating from chest", "hurts when i breathe chest", 
+        "severe chest pain", "heart pain"
+      ],
+      "responses": [
+        "Chest pain can be an indicator of a medical emergency, such as a heart issue. This could be serious. Please seek medical attention immediately or call your local emergency number.",
+        "Do not ignore chest pain or pressure. Please seek emergency medical care right away to ensure your safety."
+      ]
+    },
+    {
+      "tag": "anxiety",
+      "patterns": [
+        "i feel anxious", "anxiety", "panic attack", "i feel nervous", "worried",
+        "feeling stressed and anxious", "severe anxiety", "i can't calm down", 
+        "my heart is racing from anxiety", "anxious thoughts", "i feel overwhelmed", 
+        "nervousness", "i'm having a panic attack", "too much stress", "anxiety symptoms",
+        "i feel a lot of dread", "restless and anxious", "how to stop anxiety", 
+        "i am freaking out", "feeling jittery"
+      ],
+      "responses": [
+        "It sounds like you are experiencing anxiety. Try taking slow, deep breaths. Inhale for 4 seconds, hold for 4, and exhale for 4.",
+        "Anxiety and stress can feel very overwhelming. Try to find a quiet space, ground yourself, and practice deep breathing. If this happens frequently, speaking to a therapist might help."
+      ]
+    },
+    {
+      "tag": "stomach_pain",
+      "patterns": [
+        "stomach ache", "my stomach hurts", "stomach pain", "abdominal pain", "tummy ache",
+        "belly hurts", "cramps in my stomach", "upset stomach", "pain in my gut", 
+        "my belly is aching", "sharp stomach pain", "nausea and stomach pain", "gastric pain",
+        "indigestion", "lower abdominal pain", "stomach discomfort", "my stomach is killing me",
+        "bad stomach ache", "gut pain", "stomach cramps"
+      ],
+      "responses": [
+        "Stomach discomfort may arise from indigestion, trapped gas, or dietary choices. Consider eating light, bland foods and staying hydrated with water or clear broths.",
+        "Mild abdominal pain can often be relieved with rest and hydration. However, if the pain is severe, persistent, or accompanied by a high fever, please seek medical attention."
+      ]
+    },
+    {
+      "tag": "cough",
+      "patterns": [
+        "i have a cough", "coughing", "dry cough", "wet cough", "can't stop coughing",
+        "coughing a lot", "persistent cough", "bad cough", "coughing up phlegm", 
+        "tickle in my throat", "hacking cough", "chest cough", "how to stop coughing",
+        "coughing at night", "i keep coughing", "severe cough", "cough remedies", 
+        "smokers cough", "my cough is getting worse", "coughing fits"
+      ],
+      "responses": [
+        "For a common cough, staying hydrated and drinking warm fluids like tea with honey can help soothe your throat.",
+        "A cough is often your body's way of clearing your airways. Rest and drink plenty of water. If the cough lasts longer than two weeks, you should see a doctor."
+      ]
+    },
+    {
+      "tag": "diet_advice",
+      "patterns": [
+        "diet advice", "what should i eat", "healthy diet", "nutrition tips", 
+        "how to eat healthy", "best diet for weight loss", "healthy foods", 
+        "what is a balanced diet", "food advice", "dietary recommendations", 
+        "what not to eat", "good nutrition", "how to improve my diet", 
+        "healthy eating habits", "meal planning advice", "what are healthy snacks",
+        "diet tips", "how to manage my diet", "eating for health", "nutrition advice"
+      ],
+      "responses": [
+        "A healthy diet includes a variety of whole foods: lean proteins, whole grains, and plenty of fruits and vegetables. Try to limit processed foods and excess sugar.",
+        "Focusing on a balanced plate can improve your health. Drink plenty of water and try to include a good source of fiber in every meal."
+      ]
+    },
+    {
+      "tag": "hydration",
+      "patterns": [
+        "how much water should i drink", "hydration", "drinking water", "am i dehydrated",
+        "benefits of drinking water", "staying hydrated", "water intake", "how to stay hydrated",
+        "dehydration symptoms", "should i drink more water", "daily water requirement",
+        "tips for drinking more water", "is water good for you", "hydration tips", 
+        "why is hydration important", "drink water", "how to hydrate", "signs of dehydration",
+        "water consumption", "do i need more water"
+      ],
+      "responses": [
+        "A general rule is to aim for about 8 glasses (64 ounces) of water a day, though this varies based on your activity level and climate.",
+        "Signs of dehydration include dark yellow urine, dry mouth, and feeling tired. Try carrying a water bottle with you to encourage regular sips."
+      ]
+    },
+    {
+      "tag": "sleep_advice",
+      "patterns": [
+        "how to get better sleep", "sleep advice", "how to sleep fast", "tips for good sleep",
+        "improve sleep quality", "how many hours of sleep do i need", "healthy sleep habits",
+        "sleep hygiene", "how to sleep better", "better sleep tips", "how to fall asleep easier",
+        "deep sleep tips", "what to do before bed", "sleep routine", "how to rest better",
+        "optimal sleep time", "ways to improve sleep", "good sleeping habits", 
+        "how to wake up refreshed", "advice for better sleep"
+      ],
+      "responses": [
+        "Good sleep hygiene involves going to bed at the same time every night, keeping your room dark and cool, and avoiding screens for an hour before bed.",
+        "Adults generally need 7-9 hours of sleep per night. Avoid large meals, caffeine, and alcohol right before bedtime for better rest."
+      ]
+    },
+    {
+      "tag": "exercise_advice",
+      "patterns": [
+        "exercise advice", "how to start working out", "fitness tips", "best exercises",
+        "how often should i exercise", "workout advice", "exercise routines", 
+        "benefits of exercise", "how to stay active", "beginner workout tips", "staying fit",
+        "how to exercise safely", "what workouts are best", "daily exercise", 
+        "fitness recommendations", "how much exercise do i need", "simple exercises",
+        "cardio vs weightlifting", "home workout advice", "getting in shape"
+      ],
+      "responses": [
+        "It is generally recommended to get at least 150 minutes of moderate aerobic exercise or 75 minutes of vigorous exercise a week, plus strength training.",
+        "To stay active, find an activity you enjoy, like walking, cycling, or swimming. Always warm up before exercising to prevent injuries."
+      ]
+    }
+  ]
+}
